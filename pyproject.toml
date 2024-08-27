@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "prestapy"
+version = "0.1.0"
+description = ""
+authors = ["Julio Suarez <jssantander1992@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+
+
+click = "^8.1.7"
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.2"
+requests-mock = "^1.12.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+prestapy = "prestapy.cli:cli"
