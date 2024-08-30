@@ -1,20 +1,37 @@
-import click
-import requests
+import os
 
-from prestapy.prestashop_ep.brands import get_manufacturers
+import click
+
+from prestapy.prestashop_ep.brands import Brand
 
 
 @click.group()
 @click.option('--debug/--no-debug', default=False)
-def cli(debug):
-    click.echo(f"Debug mode is {'on' if debug else 'off'}")
+@click.pass_context
+def cli(ctx, debug):
+    # ensure that ctx.obj exists and is a dict (in case `cli()` is called
+    # by means other than the `if` block below)
+    ctx.ensure_object(dict)
+
+    ctx.obj['DEBUG'] = debug
 
 
-@cli.command()  # @cli, not @click!
-@click.option('--url', type=str, required=True)
-@click.option('--api_key', type=str, required=True)
-def brand(url, api_key):
-    click.echo(get_manufacturers(url, api_key))
+@cli.group()  # @cli, not @click!
+@click.pass_context
+def brand(ctx):
+    ctx.ensure_object(dict)
+
+    ctx.obj['URL'] = os.environ.get("URL", "")
+    ctx.obj['API_KEY'] = os.environ.get("API_KEY", "")
+
+
+@brand.command()
+@click.pass_context
+def brand_list(ctx):
+    url = ctx.obj.get('URL')
+    api_key = ctx.obj.get('API_KEY')
+    br = Brand(url, api_key)
+    click.echo(br.get_all())
 
 
 if __name__ == "__main__":

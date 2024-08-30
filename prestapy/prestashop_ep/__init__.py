@@ -1,24 +1,38 @@
 import json
 import os
+from enum import Enum
 
 import requests
 from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 
 
-class PSEndPoint:
-    def __init__(self, base_url, endpoint, api_key=None):
+class PsWebService:
+    class EndPointEnum(Enum):
+        PRODUCTS = 'products'
+        BRANDS = "manufacturers"
+        CATEGORIES = "categories"
+        FEATURES = "product_features"
+        FEATURE_VALUES = "product_feature_values"
+        STOCK_AVAILABLES = "stock_availables"
+
+    def __init__(self, endpoint: EndPointEnum, base_url, api_key=None):
+
         self._url = base_url
-        self._base_endpoint = endpoint
+        self._endpoint = endpoint
         self._api_key = api_key if api_key is not None else os.environ.get('PSAPI_KEY')
 
-    def get_url(self):
+    @property
+    def endpoint(self):
+        return self._endpoint
 
+    @property
+    def url(self):
         return self._url
 
     @staticmethod
     def decode_data(content):
-        match os.environ.get("DEFAULT_OUTPUT_FORMAT","JSON"):
+        match os.environ.get("DEFAULT_OUTPUT_FORMAT", "JSON"):
             case "JSON":
                 return json.loads(content)
             case _:
@@ -34,25 +48,27 @@ class PSEndPoint:
         auth = HTTPBasicAuth(self._api_key, password='')
 
         r = requests.get(
-            f'{self._url}/{self._base_endpoint}/{object_id}', auth=auth, params=params)
+            f'{self._url}/api/{self._endpoint.value}/{object_id}', auth=auth, params=params)
 
         r.raise_for_status()
 
         content = r.content
 
-        return PSEndPoint.decode_data(content)
+        return PsWebService.decode_data(content)
 
     def get_all(self, **kwargs):
 
         params = kwargs.get('params', {})
 
-        params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT","JSON") if "output_format" not in params else params[
-            "output_format"]
+        params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT", "JSON") if "output_format" not in params else \
+            params[
+                "output_format"]
 
         auth = HTTPBasicAuth(self._api_key, password='')
 
+        url = f'{self._url}api/{self._endpoint.value}'
 
-        r = requests.get(f'{self._url}/{self._base_endpoint}',
+        r = requests.get(url,
                          auth=auth, params=params)
 
         try:
@@ -62,7 +78,7 @@ class PSEndPoint:
             return None
         content = r.content
 
-        return PSEndPoint.decode_data(content)
+        return PsWebService.decode_data(content)
 
     def create(self, data):
         pass
