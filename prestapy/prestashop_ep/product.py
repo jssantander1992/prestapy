@@ -13,10 +13,11 @@ class Product(PsWebService):
         super().__init__(PsWebService.EndPointEnum.PRODUCTS, base_url, api_key)
 
     def get_missing_products(self, brand):
-        manufacturers_ep = Brand(base_url=self.url)
-        stock_ep = Stock(base_url=self.url)
-        category_ep = Category(base_url=self.url)
-        feature_ep = Feature(base_url=self.url)
+        manufacturers_ep = Brand(base_url=self.url, api_key=self._api_key)
+        stock_ep = Stock(base_url=self.url, api_key=self._api_key)
+        category_ep = Category(base_url=self.url, api_key=self._api_key)
+        feature_ep = Feature(base_url=self.url, api_key=self._api_key)
+
 
         manufacturers_params = {
             "filter[name]": brand
