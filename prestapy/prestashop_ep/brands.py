@@ -13,7 +13,7 @@ class Brand(PsWebService):
             "filter[active]": 1
         }
         manufacturers_data = super().get_all(params=manufacturers_params)
-        return {d['id']: d['name'] for d in manufacturers_data}
+        return {d['id']: d['name'] for d in manufacturers_data.get('manufacturers')}
 
     def get_products(self, manufacturer):
         pass
