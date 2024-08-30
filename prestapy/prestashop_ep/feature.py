@@ -17,7 +17,7 @@ class Feature(PsWebService):
 
         product_features_dict = {d['id']: d['name'] for d in product_features.get("product_features", [])}
 
-        fs = FeatureValue(base_url=self._url)
+        fs = FeatureValue(base_url=self._url, api_key=self._api_key)
 
         product_feature_values = fs.get_all()
 
