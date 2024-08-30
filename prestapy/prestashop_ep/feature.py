@@ -1,4 +1,4 @@
-from . import PsWebService
+from .base import PsWebService
 
 
 class Feature(PsWebService):

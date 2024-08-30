@@ -1,7 +1,7 @@
 import random
 import time
 
-from . import PsWebService
+from .base import PsWebService
 from .brands import Brand
 from .category import Category
 from .feature import Feature

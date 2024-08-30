@@ -1,0 +1,90 @@
+import json
+import os
+from enum import Enum
+
+import requests
+from requests import HTTPError
+from requests.auth import HTTPBasicAuth
+
+
+class PsWebService:
+    class EndPointEnum(Enum):
+        PRODUCTS = 'products'
+        BRANDS = "manufacturers"
+        CATEGORIES = "categories"
+        FEATURES = "product_features"
+        FEATURE_VALUES = "product_feature_values"
+        STOCK_AVAILABLES = "stock_availables"
+
+    def __init__(self, endpoint: EndPointEnum, base_url, api_key=None):
+
+        self._url = base_url
+        self._endpoint = endpoint
+        self._api_key = api_key if api_key is not None else os.environ.get('PSAPI_KEY')
+
+    @property
+    def endpoint(self):
+        return self._endpoint
+
+    @property
+    def url(self):
+        return self._url
+
+    @staticmethod
+    def decode_data(content):
+        match os.environ.get("DEFAULT_OUTPUT_FORMAT", "JSON"):
+            case "JSON":
+                return json.loads(content)
+            case _:
+                return None
+
+    def get_single(self, object_id, **kwargs):
+
+        params = kwargs.get('params', {})
+
+        params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT") if "output_format" not in params else params[
+            "output_format"]
+
+        auth = HTTPBasicAuth(self._api_key, password='')
+
+        r = requests.get(
+            f'{self._url}/api/{self._endpoint.value}/{object_id}', auth=auth, params=params)
+
+        r.raise_for_status()
+
+        content = r.content
+
+        return PsWebService.decode_data(content)
+
+    def get_all(self, **kwargs):
+
+        params = kwargs.get('params', {})
+
+        params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT", "JSON") if "output_format" not in params else \
+            params[
+                "output_format"]
+
+        auth = HTTPBasicAuth(self._api_key, password='')
+
+        url = f'{self._url}api/{self._endpoint.value}'
+
+        r = requests.get(url,
+                         auth=auth, params=params)
+
+        try:
+            r.raise_for_status()
+        except HTTPError as e:
+            print(f"Error: {e}")
+            return None
+        content = r.content
+
+        return PsWebService.decode_data(content)
+
+    def create(self, data):
+        pass
+
+    def update(self, object_id, data):
+        pass
+
+    def delete(self, object_id):
+        pass

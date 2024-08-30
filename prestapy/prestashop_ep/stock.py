@@ -1,4 +1,4 @@
-from prestapy.prestashop_ep import PsWebService
+from prestapy.prestashop_ep.base import PsWebService
 
 
 class Stock(PsWebService):

@@ -1,6 +1,6 @@
 from typing import List
 
-from . import PsWebService
+from .base import PsWebService
 
 
 class Brand(PsWebService):
