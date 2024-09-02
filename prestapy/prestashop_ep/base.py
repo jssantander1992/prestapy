@@ -53,7 +53,7 @@ class PsWebService:
             "output_format"]
         url = f'{self._url}/api/{self._endpoint.value}/{object_id}'
         try:
-            r = requests.get(url=url, auth=self.auth, params=params)
+            r = requests.get(url=url, auth=self._auth, params=params)
 
             r.raise_for_status()
         except HTTPError as http_err:

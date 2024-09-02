@@ -18,9 +18,9 @@ class Brand(PsWebService):
         manufacturers_data = super().get_all(params=manufacturers_params)
         return {d['id']: d['name'] for d in manufacturers_data.get('manufacturers')}
 
-    def get_products(self, brand, full_info=False, in_stock=True, without_images=False):
-        products_ep = Product()
-        stock_ep = Stock()
+    def get_products(self, brand:str, full_info=False, in_stock=True, without_images=False):
+        products_ep = Product(base_url=self.url, api_key=self.api_key)
+        stock_ep = Stock(base_url=self.url, api_key=self.api_key)
 
         manufacturers_params = {
             "filter[name]": brand
@@ -40,7 +40,6 @@ class Brand(PsWebService):
             display = "[id,reference,id_default_image]"
 
         while True:
-            # print(f"Getting the products from {count * limit} to {(count + 1) * limit}")
             product_params = {
                 "display": display,
                 "filter[id_manufacturer]": manufacturer_id,
@@ -62,12 +61,11 @@ class Brand(PsWebService):
         if in_stock:
             stocks = stock_ep.stock_range()
             all_manufacturer_products = [product for product in all_manufacturer_products if
-                                int(product['id']) in stocks]
-
+                                         int(product['id']) in stocks]
 
         if without_images:
-            all_manufacturer_products = [product for product in all_manufacturer_products if (product['id_default_image'] == "")]
-
+            all_manufacturer_products = [product for product in all_manufacturer_products if
+                                         (product['id_default_image'] == "")]
 
         if full_info:
             categories = {}
