@@ -2,7 +2,7 @@ from .base import PsWebService, EndPointEnum
 
 
 class Category(PsWebService):
-    def __init__(self, base_url, api_key=None):
+    def __init__(self, base_url=None, api_key=None):
         super().__init__(EndPointEnum.CATEGORIES, base_url, api_key)
 
     @staticmethod

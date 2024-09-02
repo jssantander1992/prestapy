@@ -19,8 +19,8 @@ class Brand(PsWebService):
         return {d['id']: d['name'] for d in manufacturers_data.get('manufacturers')}
 
     def get_products(self, brand, full_info=False, in_stock=True, without_images=False):
-        products_ep = Product(base_url=self.url, api_key=self._api_key)
-        stock_ep = Stock(base_url=self.url, api_key=self._api_key)
+        products_ep = Product()
+        stock_ep = Stock()
 
         manufacturers_params = {
             "filter[name]": brand

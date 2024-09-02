@@ -2,7 +2,7 @@ from prestapy.prestashop_ep.base import PsWebService, EndPointEnum
 
 
 class Stock(PsWebService):
-    def __init__(self, base_url, api_key=None):
+    def __init__(self, base_url=None, api_key=None):
         super().__init__(EndPointEnum.STOCK_AVAILABLES, base_url, api_key)
 
     def stock_range(self, start_quantity=1, end_quantity=1000):

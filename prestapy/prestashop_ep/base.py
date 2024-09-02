@@ -33,6 +33,10 @@ class PsWebService:
     def url(self):
         return self._url
 
+    @property
+    def api_key(self):
+        return self._api_key
+
     @staticmethod
     def decode_data(content):
         match os.environ.get("DEFAULT_OUTPUT_FORMAT", "JSON"):

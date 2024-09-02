@@ -62,7 +62,7 @@ class Product(PsWebService):
             categories = {}
 
         new_categories_ids = [cat.get('id') for cat in pr_categories if int(cat.get('id')) not in categories]
-        category_ep = Category(base_url=self.url, api_key=self._api_key)
+        category_ep = Category()
         cat_params = {
             "filter[id]": f"[{'|'.join(new_categories_ids)}]"
         }
@@ -97,7 +97,7 @@ class Product(PsWebService):
         if features is None:
             features = {}
 
-        feature_ep = Feature(base_url=self.url, api_key=self._api_key)
+        feature_ep = Feature()
 
         pr_features_ids = [feat.get('id') for feat in pr_features]
         new_features_ids = [feat for feat in pr_features_ids if int(feat) not in features]
@@ -117,7 +117,7 @@ class Product(PsWebService):
         if feature_values is None:
             feature_values = {}
 
-        feature_value_ep = FeatureValue(base_url=self.url, api_key=self._api_key)
+        feature_value_ep = FeatureValue()
 
         pr_features_ids = [feat.get('id_feature_value') for feat in pr_features]
         new_features_ids = [feat for feat in pr_features_ids if int(feat) not in feature_values]
