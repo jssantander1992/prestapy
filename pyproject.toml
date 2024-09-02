@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prestapy"
-version = "0.1.6a1"
+version = "0.1.6"
 description = ""
 authors = ["Julio Suarez <jssantander1992@gmail.com>"]
 readme = "README.md"
