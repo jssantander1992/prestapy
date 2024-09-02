@@ -7,20 +7,23 @@ from requests import HTTPError
 from requests.auth import HTTPBasicAuth
 
 
+class EndPointEnum(Enum):
+    PRODUCTS = 'products'
+    BRANDS = "manufacturers"
+    CATEGORIES = "categories"
+    FEATURES = "product_features"
+    FEATURE_VALUES = "product_feature_values"
+    STOCK_AVAILABLES = "stock_availables"
+
+
 class PsWebService:
-    class EndPointEnum(Enum):
-        PRODUCTS = 'products'
-        BRANDS = "manufacturers"
-        CATEGORIES = "categories"
-        FEATURES = "product_features"
-        FEATURE_VALUES = "product_feature_values"
-        STOCK_AVAILABLES = "stock_availables"
 
-    def __init__(self, endpoint: EndPointEnum, base_url, api_key=None):
+    def __init__(self, endpoint: EndPointEnum, base_url=None, api_key=None):
 
-        self._url = base_url
+        self._url = base_url if base_url is not None else os.environ.get('BASE_URL')
         self._endpoint = endpoint
         self._api_key = api_key if api_key is not None else os.environ.get('PSAPI_KEY')
+        self._auth = HTTPBasicAuth(self._api_key, password='')
 
     @property
     def endpoint(self):
@@ -45,10 +48,10 @@ class PsWebService:
         params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT") if "output_format" not in params else params[
             "output_format"]
 
-        auth = HTTPBasicAuth(self._api_key, password='')
+
 
         r = requests.get(
-            f'{self._url}/api/{self._endpoint.value}/{object_id}', auth=auth, params=params)
+            f'{self._url}/api/{self._endpoint.value}/{object_id}', auth=self.auth, params=params)
 
         r.raise_for_status()
 
@@ -64,12 +67,12 @@ class PsWebService:
             params[
                 "output_format"]
 
-        auth = HTTPBasicAuth(self._api_key, password='')
+
 
         url = f'{self._url}api/{self._endpoint.value}'
 
         r = requests.get(url,
-                         auth=auth, params=params)
+                         auth=self._auth, params=params)
 
         try:
             r.raise_for_status()

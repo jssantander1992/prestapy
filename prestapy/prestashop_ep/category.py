@@ -1,9 +1,9 @@
-from .base import PsWebService
+from .base import PsWebService, EndPointEnum
 
 
 class Category(PsWebService):
     def __init__(self, base_url, api_key=None):
-        super().__init__(PsWebService.EndPointEnum.CATEGORIES, base_url, api_key)
+        super().__init__(EndPointEnum.CATEGORIES, base_url, api_key)
 
     @staticmethod
     def append_parent_categories(categories, category):
@@ -26,8 +26,10 @@ class Category(PsWebService):
         return category[0], new_category
 
     def get_all(self, **kwargs):
+        params = kwargs.get('params', {})
         categories_params = {
-            "display": "[id, name, id_parent, description, h1_title, link_rewrite, meta_title]"
+            "display": "[id, name, id_parent, description, h1_title, link_rewrite, meta_title]",
+            **params
         }
         categories_data = super().get_all(
             params=categories_params
