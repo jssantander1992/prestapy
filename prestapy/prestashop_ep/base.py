@@ -47,13 +47,16 @@ class PsWebService:
 
         params['output_format'] = os.environ.get("DEFAULT_OUTPUT_FORMAT") if "output_format" not in params else params[
             "output_format"]
+        url = f'{self._url}/api/{self._endpoint.value}/{object_id}'
+        try:
+            r = requests.get(url=url, auth=self.auth, params=params)
 
-
-
-        r = requests.get(
-            f'{self._url}/api/{self._endpoint.value}/{object_id}', auth=self.auth, params=params)
-
-        r.raise_for_status()
+            r.raise_for_status()
+        except HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+            return None
+        except Exception as err:
+            print(f'An error occurred: {err}')
 
         content = r.content
 
@@ -67,17 +70,15 @@ class PsWebService:
             params[
                 "output_format"]
 
-
-
         url = f'{self._url}api/{self._endpoint.value}'
-
-        r = requests.get(url,
-                         auth=self._auth, params=params)
-
         try:
+            r = requests.get(url, auth=self._auth, params=params)
             r.raise_for_status()
-        except HTTPError as e:
-            print(f"Error: {e}")
+        except HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+            return None
+        except Exception as err:
+            print(f'An error occurred: {err}')
             return None
         content = r.content
 
