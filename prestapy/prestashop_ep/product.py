@@ -106,8 +106,8 @@ class Product(PsWebService):
             "display": "[id,name]",
             "filter[id]": f"[{'|'.join(new_features_ids)}]"
         }
-
-        new_features = feature_ep.get_all(params=feat_params).get("product_features", []) if new_features_ids else []
+        temp_new_features = feature_ep.get_all(params=feat_params)
+        new_features = temp_new_features.get("product_features", []) if new_features_ids and temp_new_features else []
         refactor_features = {feat.get("id"): feat.get("name") for feat in new_features}
 
         features = {**features, **refactor_features}
