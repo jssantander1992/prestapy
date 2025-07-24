@@ -61,7 +61,7 @@ class Product(PsWebService):
         if categories is None:
             categories = {}
 
-        new_categories_ids = [cat.get('id') for cat in pr_categories if int(cat.get('id')) not in categories]
+        new_categories_ids = [cat.get('id').__str__() for cat in pr_categories if int(cat.get('id')) not in categories]
         category_ep = Category(base_url=self.url, api_key=self.api_key)
         cat_params = {
             "filter[id]": f"[{'|'.join(new_categories_ids)}]"
