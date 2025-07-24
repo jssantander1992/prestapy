@@ -28,7 +28,7 @@ class Category(PsWebService):
     def get_all(self, **kwargs):
         params = kwargs.get('params', {})
         categories_params = {
-            "display": "[id, name, id_parent, description, h1_title, link_rewrite, meta_title]",
+            "display": "[id, name, id_parent, description, link_rewrite, meta_title]",
             **params
         }
         categories_data = super().get_all(
@@ -40,7 +40,7 @@ class Category(PsWebService):
                 "name": d['name'],
                 "id_parent": d['id_parent'],
                 "description": d['description'],
-                "h1_title": d["h1_title"],
+                # "h1_title": d["h1_title"],
                 "link_rewrite": d["link_rewrite"],
                 "meta_title": d["meta_title"]
             } for d in categories_data}

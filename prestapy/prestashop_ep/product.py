@@ -100,7 +100,7 @@ class Product(PsWebService):
         feature_ep = Feature(base_url=self.url, api_key=self.api_key)
 
         pr_features_ids = [feat.get('id') for feat in pr_features]
-        new_features_ids = [feat for feat in pr_features_ids if int(feat) not in features]
+        new_features_ids = [feat.__str__() for feat in pr_features_ids if int(feat) not in features]
 
         feat_params = {
             "display": "[id,name]",
@@ -120,7 +120,7 @@ class Product(PsWebService):
         feature_value_ep = FeatureValue(base_url=self.url, api_key=self.api_key)
 
         pr_features_ids = [feat.get('id_feature_value') for feat in pr_features]
-        new_features_ids = [feat for feat in pr_features_ids if int(feat) not in feature_values]
+        new_features_ids = [feat.__str__() for feat in pr_features_ids if int(feat) not in feature_values]
 
         feat_params = {
             "display": "[id,value]",
